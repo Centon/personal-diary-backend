@@ -71,3 +71,44 @@ const updateNote = (req, res) => {
         });
       });
   };
+  //troisiéme partie
+
+  const getNote = (req, res) => {
+    const id = req.params.id;
+    Note.findById(id)
+      .then(data => {
+        if (!data)
+          res.status(404).send({ message: `Not found note with id=${id}.` });
+        else res.send(data);
+      })
+      .catch(err => {
+        res
+          .status(500)
+          .send({ message: `Error fetching note with id=${id}` });
+      });
+  };
+  const getAllNotes = (req, res) => {
+    const username = req.params.username;
+    User.findOne({
+      username: username
+    })
+      .exec((err, user) => {
+        Note.find({userId: user._id}).sort({date: -1})
+        .then(data => {
+          res.send(data);
+        })
+        .catch(err => {
+          res.status(500).send({
+            message:
+              err.message || "Some error occurred while fetching notes."
+          });
+        });
+      });
+  };
+  export default {
+    createNote,
+    updateNote,
+    deleteNote,
+    getNote,
+    getAllNotes
+  }

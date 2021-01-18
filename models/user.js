@@ -13,3 +13,5 @@ const UserSchema = new mongoose.Schema({
     required: true
   }
 });
+
+export default mongoose.model("note", UserSchema);
